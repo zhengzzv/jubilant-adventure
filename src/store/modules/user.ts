@@ -32,6 +32,7 @@ export const useUserStore = defineStore("user", () => {
 
   const fetchUserRole = async () => {
     await api.UserAPi.currentUser().then((res) => {
+      currentUser.value = res.data
       const roleCode = res.data.role?.code
       if (roleCode) {
         setRoles([roleCode])
@@ -40,11 +41,13 @@ export const useUserStore = defineStore("user", () => {
   }
 
   /** 登出 */
-  const logout = () => {
-    removeToken()
-    token.value = ""
-    roles.value = []
-    resetRouter()
+  const logout = async () => {
+    await api.UserAPi.logout().then(() => {
+      removeToken()
+      token.value = ""
+      roles.value = []
+      resetRouter()
+    })
   }
   /** 重置 Token */
   const resetToken = () => {

@@ -1,15 +1,5 @@
-<div align="center">
-  <img alt="V3-Admin-Vite-Logo" width="120" height="120" src="./src/assets/layout/logo.png">
-  <h1>V3 Admin Vite</h1>
-  <span>English | <a href="./README.zh-CN.md">中文</a></span>
-</div>
-
 ## ⚡ Introduction
 
-v3-admin-vite is a free and open source middle and background management system basic solution, based on mainstream framework such as Vue3, TypeScript, Element Plus, Pinia and Vite.
-
-- Vue-Cli 5.x: [v3-admin](https://github.com/un-pany/v3-admin)
-- Electron desktop: [v3-electron-vite](https://github.com/un-pany/v3-electron-vite)
 
 ## Feature
 
@@ -38,20 +28,6 @@ v3-admin-vite is a free and open source middle and background management system 
 - **Error page**: 403, 404
 - **Dashboard**: Display different Dashboard pages according to different users
 - **Other functions**：SVG, Dynamic Sidebar, Dynamic Breadcrumb Navigation, Tabbed Navigation, Screenfull, Adaptive Shrink Sidebar
-
-## 📚 Document
-
-[Chinese documentation](https://juejin.cn/post/7089377403717287972)
-
-## Gitee repository
-
-[Gitee](https://gitee.com/un-pany/v3-admin-vite)
-
-## Online preview
-
-| Location     | account             | Link                                            |
-| ------------ | ------------------- | ----------------------------------------------- |
-| github-pages | `admin` or `editor` | [Link](https://un-pany.github.io/v3-admin-vite) |
 
 ## 🚀 Development
 
@@ -116,23 +92,7 @@ pnpm lint
 - `types` Type definition
 - `wip` In development
 
-## 💕 Contributors
-
-Thanks you to all the contributors!
-
-<a href="https://github.com/un-pany/v3-admin-vite/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=un-pany/v3-admin-vite" />
-</a>
-
-## Group
-
-QQ group：1014374415 (left) && add me on WeChat，Invite you to join WeChat group (right)
-
-![qq.png](./src/assets/docs/qq.png)
-![wechat.png](./src/assets/docs/wechat.png)
 
 ## 📄 License
 
 [MIT](./LICENSE)
-
-Copyright (c) 2022 [pany](https://github.com/pany-ang)

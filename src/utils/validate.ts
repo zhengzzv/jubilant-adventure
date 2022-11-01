@@ -11,10 +11,7 @@ export const isArray = (arg: any) => {
 }
 
 export function isString(str: any) {
-  if (typeof str === "string" || str instanceof String) {
-    return true
-  }
-  return false
+  return typeof str === "string" || str instanceof String
 }
 
 export const isValidURL = (url: string) => {

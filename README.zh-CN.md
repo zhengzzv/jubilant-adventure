@@ -1,15 +1,4 @@
-<div align="center">
-  <img alt="V3-Admin-Vite-Logo" width="120" height="120" src="./src/assets/layout/logo.png">
-  <h1>V3 Admin Vite</h1>
-  <span><a href="./README.md">English</a> | 中文</span>
-</div>
-
 ## ⚡ 简介
-
-一个免费开源的中后台管理系统基础解决方案，基于 Vue3、TypeScript、Element Plus、Pinia 和 Vite 等主流技术.
-
-- Vue-Cli 5.x 版: [v3-admin](https://github.com/un-pany/v3-admin)
-- Electron 桌面版: [v3-electron-vite](https://github.com/un-pany/v3-electron-vite)
 
 ## 特性
 
@@ -38,20 +27,6 @@
 - **错误页面**: 403、404
 - **Dashboard**：根据不同用户显示不同的 Dashboard 页面
 - **其他内置功能**：SVG、动态侧边栏、动态面包屑、标签页快捷导航、Screenfull 全屏、自适应收缩侧边栏
-
-## 📚 文档
-
-[中文文档](https://juejin.cn/post/7089377403717287972)
-
-## 国内仓库
-
-[Gitee](https://gitee.com/un-pany/v3-admin-vite)
-
-## 在线预览
-
-| 位置         | 账号            | 链接                                            |
-| ------------ | --------------- | ----------------------------------------------- |
-| github-pages | admin 或 editor | [链接](https://un-pany.github.io/v3-admin-vite) |
 
 ## 🚀 开发
 
@@ -116,23 +91,6 @@ pnpm lint
 - `types` 类型定义文件更改
 - `wip` 开发中
 
-## 💕 贡献者
-
-感谢所有的贡献者！
-
-<a href="https://github.com/un-pany/v3-admin-vite/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=un-pany/v3-admin-vite" />
-</a>
-
-## 可有可无的群
-
-QQ 群：1014374415（左）&& 加我微信，拉你进微信群（右）
-
-![qq.png](./src/assets/docs/qq.png)
-![wechat.png](./src/assets/docs/wechat.png)
-
 ## 📄 License
 
 [MIT](./LICENSE)
-
-Copyright (c) 2022 [pany](https://github.com/pany-ang)

@@ -992,15 +992,10 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 用户退出登陆
          * @summary 退出登陆
-         * @param {string} authorization 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        logout: async (authorization: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'authorization' is not null or undefined
-            if (authorization === null || authorization === undefined) {
-                throw new RequiredError('authorization','Required parameter authorization was null or undefined when calling logout.');
-            }
+        logout: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/users/logout`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -1020,10 +1015,6 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
                     ? await configuration.accessToken()
                     : await configuration.accessToken;
                 localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
-            }
-
-            if (authorization !== undefined && authorization !== null) {
-                localVarHeaderParameter['Authorization'] = String(authorization);
             }
 
 
@@ -1154,12 +1145,11 @@ export const UsersApiFp = function(configuration?: Configuration) {
         /**
          * 用户退出登陆
          * @summary 退出登陆
-         * @param {string} authorization 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async logout(authorization: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).logout(authorization, options);
+        async logout(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).logout(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -1247,12 +1237,11 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
         /**
          * 用户退出登陆
          * @summary 退出登陆
-         * @param {string} authorization 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        logout(authorization: string, options?: any): AxiosPromise<void> {
-            return UsersApiFp(configuration).logout(authorization, options).then((request) => request(axios, basePath));
+        logout(options?: any): AxiosPromise<void> {
+            return UsersApiFp(configuration).logout(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1351,13 +1340,12 @@ export class UsersApi extends BaseAPI {
     /**
      * 用户退出登陆
      * @summary 退出登陆
-     * @param {string} authorization 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public logout(authorization: string, options?: any) {
-        return UsersApiFp(this.configuration).logout(authorization, options).then((request) => request(this.axios, this.basePath));
+    public logout(options?: any) {
+        return UsersApiFp(this.configuration).logout(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -10,6 +10,7 @@ import Hamburger from "../Hamburger/index.vue"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import Screenfull from "@/components/Screenfull/index.vue"
 import Notify from "@/components/Notify/index.vue"
+import { storeToRefs } from "pinia"
 
 const router = useRouter()
 const appStore = useAppStore()
@@ -33,6 +34,8 @@ const logout = () => {
   userStore.logout()
   router.push("/login")
 }
+
+const { currentUser } = storeToRefs(userStore)
 </script>
 
 <template>
@@ -44,30 +47,11 @@ const logout = () => {
       <ThemeSwitch v-if="showThemeSwitch" class="right-menu-item" />
       <Notify class="right-menu-item" />
       <el-dropdown class="right-menu-item">
-        <el-avatar :icon="UserFilled" :size="34" />
+        <el-avatar :icon="UserFilled" :src="currentUser?.avatar" :size="34" />
         <template #dropdown>
           <el-dropdown-menu>
-            <a target="_blank" href="https://juejin.cn/post/7089377403717287972">
-              <el-dropdown-item>V3-Admin-Vite 中文文档</el-dropdown-item>
-            </a>
-            <a target="_blank" href="https://github.com/un-pany/v3-admin-vite">
-              <el-dropdown-item>V3-Admin-Vite GitHub</el-dropdown-item>
-            </a>
-            <a target="_blank" href="https://gitee.com/un-pany/v3-admin-vite">
-              <el-dropdown-item>V3-Admin-Vite Gitee</el-dropdown-item>
-            </a>
-            <a target="_blank" href="https://juejin.cn/post/6963876125428678693">
-              <el-dropdown-item divided>V3-Admin 中文文档</el-dropdown-item>
-            </a>
-            <a target="_blank" href="https://github.com/un-pany/v3-admin/blob/master/README.en.md">
-              <el-dropdown-item>V3-Admin English Docs</el-dropdown-item>
-            </a>
-            <a target="_blank" href="https://github.com/un-pany/v3-admin">
-              <el-dropdown-item>V3-Admin GitHub</el-dropdown-item>
-            </a>
-            <a target="_blank" href="https://gitee.com/un-pany/v3-admin">
-              <el-dropdown-item>V3-Admin Gitee</el-dropdown-item>
-            </a>
+            <el-dropdown-item @click="$router.push('/currentUser/userInfo')">个人信息</el-dropdown-item>
+            <el-dropdown-item @click="$router.push('/currentUser/changePassword')">修改密码</el-dropdown-item>
             <el-dropdown-item divided @click="logout">
               <span style="display: block">退出登录</span>
             </el-dropdown-item>
