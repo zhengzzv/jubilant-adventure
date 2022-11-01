@@ -205,7 +205,7 @@ export const asyncRoutes: RouteRecordRaw[] = [
     meta: {
       title: "权限管理",
       svgIcon: "lock",
-      roles: ["admin", "editor"], // 可以在根路由中设置角色
+      roles: ["SUPER_ADMIN", "editor"], // 可以在根路由中设置角色
       alwaysShow: true // 将始终显示根菜单
     },
     children: [
@@ -215,7 +215,7 @@ export const asyncRoutes: RouteRecordRaw[] = [
         name: "PagePermission",
         meta: {
           title: "页面权限",
-          roles: ["admin"] // 或者在子导航中设置角色
+          roles: ["SUPER_ADMIN"] // 或者在子导航中设置角色
         }
       },
       {

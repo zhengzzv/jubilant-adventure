@@ -2,10 +2,11 @@
 import { reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useUserStore } from "@/store/modules/user"
-import { User, Lock, Key, Picture, Loading } from "@element-plus/icons-vue"
+import { User, Lock, Key } from "@element-plus/icons-vue"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import { type FormInstance, FormRules } from "element-plus"
-import { type ILoginData, getLoginCodeApi } from "@/api/login"
+import { LoginRequest } from "@/request/generator"
+import ImageVerify from "@/components/verifyCode/index.vue"
 
 const router = useRouter()
 const loginFormRef = ref<FormInstance | null>(null)
@@ -13,12 +14,12 @@ const loginFormRef = ref<FormInstance | null>(null)
 /** 登录按钮 Loading */
 const loading = ref(false)
 /** 验证码图片 URL */
-const codeUrl = ref("")
+const code = ref("")
 /** 登录表单数据 */
-const loginForm: ILoginData = reactive({
-  username: "admin",
+const loginForm: LoginRequest = reactive({
+  username: "lingxi",
   password: "12345678",
-  code: ""
+  code: code.value
 })
 /** 登录表单校验规则 */
 const loginFormRules: FormRules = {
@@ -44,7 +45,6 @@ const handleLogin = () => {
           router.push({ path: "/" })
         })
         .catch(() => {
-          createCode()
           loginForm.password = ""
         })
         .finally(() => {
@@ -55,19 +55,6 @@ const handleLogin = () => {
     }
   })
 }
-/** 创建验证码 */
-const createCode = () => {
-  // 先清空验证码的输入
-  loginForm.code = ""
-  // 获取验证码
-  codeUrl.value = ""
-  getLoginCodeApi().then((res: any) => {
-    codeUrl.value = res.data
-  })
-}
-
-/** 初始化验证码 */
-createCode()
 </script>
 
 <template>
@@ -110,15 +97,8 @@ createCode()
               maxlength="7"
               size="large"
             >
-              <template #append>
-                <el-image :src="codeUrl" @click="createCode" draggable="false">
-                  <template #placeholder>
-                    <el-icon><Picture /></el-icon>
-                  </template>
-                  <template #error>
-                    <el-icon><Loading /></el-icon>
-                  </template>
-                </el-image>
+              <template v-slot:append>
+                <image-verify :height="30" />
               </template>
             </el-input>
           </el-form-item>
@@ -165,7 +145,7 @@ createCode()
         .el-image {
           width: 100px;
           height: 40px;
-          border-left: 0px;
+          border-left: 0;
           user-select: none;
           cursor: pointer;
           text-align: center;

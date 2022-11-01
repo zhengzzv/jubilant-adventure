@@ -1,14 +1,15 @@
 import { ref } from "vue"
 import store from "@/store"
 import { defineStore } from "pinia"
-import { usePermissionStore } from "./permission"
-import { getToken, removeToken, setToken } from "@/utils/cache/cookies"
-import router, { resetRouter } from "@/router"
-import { type ILoginData, loginApi, getUserInfoApi } from "@/api/login"
-import { type RouteRecordRaw } from "vue-router"
+import { removeToken, setToken } from "@/utils/cache/localStorage"
+import { resetRouter } from "@/router"
+import { api, setAccessToken } from "@/utils/service"
+import { ElMessage } from "element-plus"
+import { LoginRequest, UserDto } from "@/request/generator"
 
 export const useUserStore = defineStore("user", () => {
-  const token = ref<string>(getToken() || "")
+  const token = ref<string>("")
+  const currentUser = ref<UserDto>()
   const roles = ref<string[]>([])
 
   /** 设置角色数组 */
@@ -16,49 +17,28 @@ export const useUserStore = defineStore("user", () => {
     roles.value = value
   }
   /** 登录 */
-  const login = (loginData: ILoginData) => {
-    return new Promise((resolve, reject) => {
-      loginApi({
-        username: loginData.username,
-        password: loginData.password,
-        code: loginData.code
-      })
-        .then((res: any) => {
-          setToken(res.data.token)
-          token.value = res.data.token
-          resolve(true)
-        })
-        .catch((error) => {
-          reject(error)
-        })
+  const login = async (request: LoginRequest) => {
+    const response = await api.UserAPi.login(request)
+    const jwt = response.headers.authorization
+    if (jwt) {
+      token.value = jwt
+      setAccessToken(jwt)
+      setToken(jwt)
+    } else {
+      ElMessage.error("server not return jwt ")
+      resetRouter()
+    }
+  }
+
+  const fetchUserRole = async () => {
+    await api.UserAPi.currentUser().then((res) => {
+      const roleCode = res.data.role?.code
+      if (roleCode) {
+        setRoles([roleCode])
+      }
     })
   }
-  /** 获取用户详情 */
-  const getInfo = () => {
-    return new Promise((resolve, reject) => {
-      getUserInfoApi()
-        .then((res: any) => {
-          roles.value = res.data.roles
-          resolve(res)
-        })
-        .catch((error) => {
-          reject(error)
-        })
-    })
-  }
-  /** 切换角色 */
-  const changeRoles = async (role: string) => {
-    const newToken = "token-" + role
-    token.value = newToken
-    setToken(newToken)
-    await getInfo()
-    const permissionStore = usePermissionStore()
-    permissionStore.setRoutes(roles.value)
-    resetRouter()
-    permissionStore.dynamicRoutes.forEach((item: RouteRecordRaw) => {
-      router.addRoute(item)
-    })
-  }
+
   /** 登出 */
   const logout = () => {
     removeToken()
@@ -73,7 +53,7 @@ export const useUserStore = defineStore("user", () => {
     roles.value = []
   }
 
-  return { token, roles, setRoles, login, getInfo, changeRoles, logout, resetToken }
+  return { token, roles, currentUser, setRoles, login, fetchUserRole, logout, resetToken }
 })
 
 /** 在 setup 外使用 */

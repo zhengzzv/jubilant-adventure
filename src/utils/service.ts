@@ -2,12 +2,18 @@ import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios"
 import { useUserStoreHook } from "@/store/modules/user"
 import { ElMessage } from "element-plus"
 import { get } from "lodash-es"
-import { getToken } from "./cache/cookies"
+import { Configuration, UsersApi, FilesApi } from "@/request/generator"
 
 /** 创建请求实例 */
 function createService() {
   // 创建一个 Axios 实例
   const service = axios.create()
+
+  service.defaults.timeout = 5000
+
+  service.defaults.baseURL = import.meta.env.VITE_BASE_API
+
+  service.defaults.withCredentials = true
   // 请求拦截
   service.interceptors.request.use(
     (config) => config,
@@ -16,33 +22,14 @@ function createService() {
   )
   // 响应拦截（可根据具体业务作出相应的调整）
   service.interceptors.response.use(
-    (response) => {
-      // apiData 是 API 返回的数据
-      const apiData = response.data as any
-      // 这个 Code 是和后端约定的业务 Code
-      const code = apiData.code
-      // 如果没有 Code, 代表这不是项目后端开发的 API
-      if (code === undefined) {
-        ElMessage.error("非本系统的接口")
-        return Promise.reject(new Error("非本系统的接口"))
-      } else {
-        switch (code) {
-          case 0:
-            // code === 0 代表没有错误
-            return apiData
-          default:
-            // 不是正确的 Code
-            ElMessage.error(apiData.message || "Error")
-            return Promise.reject(new Error("Error"))
-        }
-      }
-    },
+    (response) => response,
     (error) => {
       // Status 是 HTTP 状态码
       const status = get(error, "response.status")
+      const errMsg = get(error, "response.data")
       switch (status) {
         case 400:
-          error.message = "请求错误"
+          error.message = "请求错误 " + errMsg.message
           break
         case 401:
           // Token 过期时，直接退出登录并强制刷新页面（会重定向到登录页）
@@ -90,11 +77,6 @@ function createService() {
 function createRequestFunction(service: AxiosInstance) {
   return function (config: AxiosRequestConfig) {
     const configDefault = {
-      headers: {
-        // 携带 Token
-        Authorization: "Bearer " + getToken(),
-        "Content-Type": get(config, "headers.Content-Type", "application/json")
-      },
       timeout: 5000,
       baseURL: import.meta.env.VITE_BASE_API,
       data: {}
@@ -103,7 +85,18 @@ function createRequestFunction(service: AxiosInstance) {
   }
 }
 
+const config = new Configuration({})
+
+export const setAccessToken = (jwtToken: string) => {
+  config.accessToken = jwtToken
+}
+
 /** 用于网络请求的实例 */
 export const service = createService()
 /** 用于网络请求的方法 */
 export const request = createRequestFunction(service)
+
+export const api = {
+  UserAPi: new UsersApi(config, "", service),
+  FileApi: new FilesApi(config, "", service)
+}

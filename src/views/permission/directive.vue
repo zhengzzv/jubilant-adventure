@@ -15,12 +15,12 @@ const handleRolesChange = () => {
     <SwitchRoles @change="handleRolesChange" />
     <div :key="key" class="margin-top">
       <div>
-        <span v-permission="['admin']" class="permission-alert">
+        <span v-permission="['SUPER_ADMIN']" class="permission-alert">
           只有
           <el-tag>admin</el-tag>可以看见这个
         </span>
-        <el-tag v-permission="['admin']" class="permission-code" type="info" size="large">
-          v-permission="['admin']"
+        <el-tag v-permission="['SUPER_ADMIN']" class="permission-code" type="info" size="large">
+          v-permission="['SUPER_ADMIN']"
         </el-tag>
       </div>
       <div>
@@ -33,12 +33,12 @@ const handleRolesChange = () => {
         </el-tag>
       </div>
       <div>
-        <span v-permission="['admin', 'editor']" class="permission-alert">
+        <span v-permission="['SUPER_ADMIN', 'editor']" class="permission-alert">
           两者
           <el-tag>admin</el-tag>和 <el-tag>editor</el-tag>都可以看见这个
         </span>
-        <el-tag v-permission="['admin', 'editor']" class="permission-code" type="info" size="large">
-          v-permission="['admin', 'editor']"
+        <el-tag v-permission="['SUPER_ADMIN', 'editor']" class="permission-code" type="info" size="large">
+          v-permission="['SUPER_ADMIN', 'editor']"
         </el-tag>
       </div>
     </div>
@@ -48,17 +48,17 @@ const handleRolesChange = () => {
         的场景。你只能通过手动设置 v-if 来实现。
       </el-tag>
       <el-tabs type="border-card" class="margin-top">
-        <el-tab-pane v-if="checkPermission(['admin'])" label="admin">
+        <el-tab-pane v-if="checkPermission(['SUPER_ADMIN'])" label="SUPER_ADMIN">
           admin 可以看见这个
-          <el-tag class="permission-code" type="info"> v-if="checkPermission(['admin'])" </el-tag>
+          <el-tag class="permission-code" type="info"> v-if="checkPermission(['SUPER_ADMIN'])" </el-tag>
         </el-tab-pane>
         <el-tab-pane v-if="checkPermission(['editor'])" label="editor">
           editor 可以看见这个
           <el-tag class="permission-code" type="info"> v-if="checkPermission(['editor'])" </el-tag>
         </el-tab-pane>
-        <el-tab-pane v-if="checkPermission(['admin', 'editor'])" label="admin 和 editor">
+        <el-tab-pane v-if="checkPermission(['SUPER_ADMIN', 'editor'])" label="admin 和 editor">
           两者 admin 和 editor 都可以看见这个
-          <el-tag class="permission-code" type="info"> v-if="checkPermission(['admin', 'editor'])" </el-tag>
+          <el-tag class="permission-code" type="info"> v-if="checkPermission(['SUPER_ADMIN', 'editor'])" </el-tag>
         </el-tab-pane>
       </el-tabs>
     </div>

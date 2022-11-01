@@ -8,8 +8,7 @@ const emit = defineEmits<{
 
 const userStore = useUserStore()
 const switchRoles = ref(userStore.roles[0])
-watch(switchRoles, async (value) => {
-  await userStore.changeRoles(value)
+watch(switchRoles, async () => {
   emit("change")
 })
 </script>
@@ -21,7 +20,7 @@ watch(switchRoles, async (value) => {
       <span>切换权限：</span>
       <el-radio-group v-model="switchRoles">
         <el-radio-button label="editor" />
-        <el-radio-button label="admin" />
+        <el-radio-button label="SUPER_ADMIN" />
       </el-radio-group>
     </div>
   </div>

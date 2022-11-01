@@ -3,7 +3,7 @@ import { useUserStoreHook } from "@/store/modules/user"
 import { usePermissionStoreHook } from "@/store/modules/permission"
 import { ElMessage } from "element-plus"
 import { whiteList } from "@/config/white-list"
-import { getToken } from "@/utils/cache/cookies"
+import { getToken } from "@/utils/cache/localStorage"
 import asyncRouteSettings from "@/config/async-route"
 import NProgress from "nprogress"
 import "nprogress/nprogress.css"
@@ -26,7 +26,7 @@ router.beforeEach(async (to, _from, next) => {
         try {
           if (asyncRouteSettings.open) {
             // 注意：角色必须是一个数组！ 例如: ['admin'] 或 ['developer', 'editor']
-            await userStore.getInfo()
+            await userStore.fetchUserRole()
             const roles = userStore.roles
             // 根据角色生成可访问的 Routes（可访问路由 = 常驻路由 + 有访问权限的动态路由）
             permissionStore.setRoutes(roles)
@@ -55,7 +55,7 @@ router.beforeEach(async (to, _from, next) => {
     }
   } else {
     // 如果没有 Token
-    if (whiteList.indexOf(to.path) !== -1) {
+    if (whiteList.includes(to.path)) {
       // 如果在免登录的白名单中，则直接进入
       next()
     } else {

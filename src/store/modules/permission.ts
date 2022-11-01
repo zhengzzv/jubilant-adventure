@@ -37,12 +37,7 @@ export const usePermissionStore = defineStore("permission", () => {
   const dynamicRoutes = ref<RouteRecordRaw[]>([])
 
   const setRoutes = (roles: string[]) => {
-    let accessedRoutes
-    if (roles.includes("admin")) {
-      accessedRoutes = asyncRoutes
-    } else {
-      accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-    }
+    const accessedRoutes = roles.includes("SUPER_ADMIN") ? asyncRoutes : filterAsyncRoutes(asyncRoutes, roles)
     routes.value = constantRoutes.concat(accessedRoutes)
     dynamicRoutes.value = accessedRoutes
   }

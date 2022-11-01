@@ -16,3 +16,14 @@ export const getActiveThemeName = () => {
 export const setActiveThemeName = (themeName: ThemeName) => {
   localStorage.setItem(CacheKey.ACTIVE_THEME_NAME, themeName)
 }
+
+export const getToken = () => {
+  const token = localStorage.getItem(CacheKey.TOKEN)
+  return token ? token : ""
+}
+export const setToken = (token: string) => {
+  localStorage.setItem(CacheKey.TOKEN, token)
+}
+export const removeToken = () => {
+  localStorage.removeItem(CacheKey.TOKEN)
+}

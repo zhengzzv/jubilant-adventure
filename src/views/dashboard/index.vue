@@ -4,15 +4,15 @@ import { useUserStore } from "@/store/modules/user"
 import AdminDashboard from "./admin/index.vue"
 import EditorDashboard from "./editor/index.vue"
 
-type CurrentRoleType = "admin" | "editor"
+type CurrentRoleType = "SUPER_ADMIN" | "editor"
 
 const userStore = useUserStore()
-const currentRole = ref<CurrentRoleType>("admin")
-if (!userStore.roles.includes("admin")) {
+const currentRole = ref<CurrentRoleType>("SUPER_ADMIN")
+if (!userStore.roles.includes("SUPER_ADMIN")) {
   currentRole.value = "editor"
 }
 </script>
 
 <template>
-  <component :is="currentRole === 'admin' ? AdminDashboard : EditorDashboard" />
+  <component :is="currentRole === 'SUPER_ADMIN' ? AdminDashboard : EditorDashboard" />
 </template>
