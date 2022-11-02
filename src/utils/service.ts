@@ -16,7 +16,10 @@ function createService() {
   service.defaults.withCredentials = true
   // 请求拦截
   service.interceptors.request.use(
-    (config) => config,
+    (request) => {
+      request.headers!.Authorization = "Bearer " + useUserStoreHook().token
+      return request
+    },
     // 发送失败
     (error) => Promise.reject(error)
   )

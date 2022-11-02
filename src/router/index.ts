@@ -1,4 +1,5 @@
 import { type RouteRecordRaw, createRouter, createWebHashHistory, createWebHistory } from "vue-router"
+import layout from "@/config/layout"
 
 const Layout = () => import("@/layout/index.vue")
 
@@ -119,6 +120,29 @@ export const asyncRoutes: RouteRecordRaw[] = [
         name: "DirectivePermission",
         meta: {
           title: "指令权限" // 如果未设置角色，则表示：该页面不需要权限，但会继承根路由的角色
+        }
+      }
+    ]
+  },
+  {
+    path: "/user-manager",
+    component: Layout,
+    name: "User",
+    redirect: "/users",
+    meta: {
+      title: "用户管理",
+      svgIcon: "lock",
+      roles: ["SUPER_ADMIN"],
+      alwaysShow: true
+    },
+    children: [
+      {
+        path: "/users",
+        component: () => import("@/views/user/index.vue"),
+        name: "User List",
+        meta: {
+          title: "用户列表",
+          roles: ["SUPER_ADMIN"]
         }
       }
     ]
