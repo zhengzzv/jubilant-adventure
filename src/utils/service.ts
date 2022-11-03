@@ -3,6 +3,7 @@ import { useUserStoreHook } from "@/store/modules/user"
 import { ElMessage } from "element-plus"
 import { get } from "lodash-es"
 import { Configuration, UsersApi, FilesApi } from "@/request/generator"
+import { getToken } from "@/utils/cache/localStorage"
 
 /** 创建请求实例 */
 function createService() {
@@ -17,7 +18,7 @@ function createService() {
   // 请求拦截
   service.interceptors.request.use(
     (request) => {
-      request.headers!.Authorization = "Bearer " + useUserStoreHook().token
+      request.headers!.Authorization = "Bearer " + getToken()
       return request
     },
     // 发送失败
@@ -88,18 +89,12 @@ function createRequestFunction(service: AxiosInstance) {
   }
 }
 
-const config = new Configuration({})
-
-export const setAccessToken = (jwtToken: string) => {
-  config.accessToken = jwtToken
-}
-
 /** 用于网络请求的实例 */
-export const service = createService()
+const service = createService()
 /** 用于网络请求的方法 */
 export const request = createRequestFunction(service)
 
 export const api = {
-  UserAPi: new UsersApi(config, "", service),
-  FileApi: new FilesApi(config, "", service)
+  UserAPi: new UsersApi(new Configuration({}), "", service),
+  FileApi: new FilesApi(new Configuration({}), "", service)
 }

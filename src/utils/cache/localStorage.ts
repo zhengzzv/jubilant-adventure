@@ -25,5 +25,6 @@ export const setToken = (token: string) => {
   localStorage.setItem(CacheKey.TOKEN, token)
 }
 export const removeToken = () => {
+  console.log("删除 token")
   localStorage.removeItem(CacheKey.TOKEN)
 }

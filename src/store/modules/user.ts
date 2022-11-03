@@ -3,7 +3,7 @@ import store from "@/store"
 import { defineStore } from "pinia"
 import { removeToken, setToken } from "@/utils/cache/localStorage"
 import { resetRouter } from "@/router"
-import { api, setAccessToken } from "@/utils/service"
+import { api } from "@/utils/service"
 import { ElMessage } from "element-plus"
 import { LoginRequest, UserDto } from "@/request/generator"
 
@@ -22,7 +22,6 @@ export const useUserStore = defineStore("user", () => {
     const jwt = response.headers.authorization
     if (jwt) {
       token.value = jwt
-      setAccessToken(jwt)
       setToken(jwt)
     } else {
       ElMessage.error("server not return jwt ")
@@ -43,6 +42,7 @@ export const useUserStore = defineStore("user", () => {
   /** 登出 */
   const logout = async () => {
     await api.UserAPi.logout().then(() => {
+      console.log("退出登陆")
       removeToken()
       token.value = ""
       roles.value = []
