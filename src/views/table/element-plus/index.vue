@@ -88,13 +88,13 @@ const searchData = reactive({
 const getTableData = () => {
   loading.value = true
   getTableDataApi({
-    currentPage: paginationData.currentPage,
-    size: paginationData.pageSize,
+    currentPage: paginationData.page,
+    size: paginationData.size,
     username: searchData.username || undefined,
     phone: searchData.phone || undefined
   })
     .then((res: any) => {
-      paginationData.total = res.data.total
+      paginationData.totalCount = res.data.total
       tableData.value = res.data.list
     })
     .catch(() => {
@@ -105,17 +105,17 @@ const getTableData = () => {
     })
 }
 const handleSearch = () => {
-  if (paginationData.currentPage === 1) {
+  if (paginationData.page === 1) {
     getTableData()
   }
-  paginationData.currentPage = 1
+  paginationData.page = 1
 }
 const resetSearch = () => {
   searchFormRef.value?.resetFields()
-  if (paginationData.currentPage === 1) {
+  if (paginationData.page === 1) {
     getTableData()
   }
-  paginationData.currentPage = 1
+  paginationData.page = 1
 }
 const handleRefresh = () => {
   getTableData()
@@ -123,7 +123,7 @@ const handleRefresh = () => {
 //#endregion
 
 /** 监听分页参数的变化 */
-watch([() => paginationData.currentPage, () => paginationData.pageSize], getTableData, { immediate: true })
+watch([() => paginationData.page, () => paginationData.size], getTableData, { immediate: true })
 </script>
 
 <template>
@@ -189,9 +189,9 @@ watch([() => paginationData.currentPage, () => paginationData.pageSize], getTabl
           background
           :layout="paginationData.layout"
           :page-sizes="paginationData.pageSizes"
-          :total="paginationData.total"
-          :page-size="paginationData.pageSize"
-          :currentPage="paginationData.currentPage"
+          :total="paginationData.totalCount"
+          :page-size="paginationData.size"
+          :currentPage="paginationData.page"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />

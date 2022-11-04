@@ -1,54 +1,189 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue"
+import { reactive, ref, watch } from "vue"
 import { UserDto } from "@/request/generator"
 import { api } from "@/utils/service"
-import { ElMessageBox } from "element-plus"
+import { CirclePlus, RefreshRight } from "@element-plus/icons-vue"
+import { ElMessageBox, ElMessage, FormInstance, FormRules } from "element-plus"
+import { usePagination } from "@/hooks/usePagination"
 
-//const dialogVisible = ref<boolean>(false)
 const loading = ref<boolean>(false)
-const tableData = ref<Array<UserDto>>()
+const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
-const fetchTableData = () => {
-  loading.value = true
-  api.UserAPi.listByPage(1, 10)
-    .then((res) => (tableData.value = res.data.data))
-    .catch(() => (tableData.value = new Array<UserDto>()))
-    .finally(() => (loading.value = false))
-}
-const handleUpdate = (userDto: UserDto) => {
-  console.log("update user " + userDto)
+// start create
+const dialogVisible = ref<boolean>(false)
+const formRef = ref<FormInstance | null>(null)
+const formData = reactive({
+  username: "",
+  nickName: "",
+  password: "",
+  email: "",
+  phone: ""
+})
+const formRules: FormRules = reactive({
+  username: [{ required: true, trigger: "blur", message: "请输入用户名" }],
+  nickname: [{ required: true, trigger: "blur", message: "请输入昵称" }],
+  password: [{ required: true, trigger: "blur", message: "请输入密码" }],
+  email: [{ required: true, trigger: "blur", message: "请输入邮箱" }]
+})
+
+const handleCreate = () => {
+  formRef.value?.validate((valid: boolean) => {
+    if (valid) {
+      api.UserAPi.createUser({
+        username: formData.username,
+        password: formData.password,
+        nickName: formData.nickName,
+        avatar: "",
+        email: formData.email
+      }).then(() => {
+        ElMessage.success("新增成功")
+        dialogVisible.value = false
+        fetchTableData()
+      })
+    } else {
+      return false
+    }
+  })
 }
 
+const resetForm = () => {
+  currentUpdateId.value = undefined
+  formData.username = ""
+  formData.password = ""
+}
+//start delete
 const handleDelete = (row: UserDto) => {
-  ElMessageBox.confirm(`正在删除用户：${row.username}，确认删除？`, "提示", {
+  ElMessageBox.confirm(`确认删除用户：${row.username} ？`, "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
   }).then(() => {
-    console.log("delete user" + row)
+    api.UserAPi.deleteUser(row.id).then(() => {
+      ElMessage.success("删除成功")
+      fetchTableData()
+    })
   })
 }
+//end delete
 
-onMounted(() => fetchTableData())
+//start update
+const currentUpdateId = ref<undefined | string>(undefined)
+
+const handleUpdate = (userDto: UserDto) => {
+  formData.username = userDto.username
+  formData.nickName = userDto.nickName
+  formData.email = userDto.email
+  formData.phone = userDto.phone
+  dialogVisible.value = true
+}
+//end update
+
+// start select
+const tableData = ref<Array<UserDto>>()
+
+const fetchTableData = () => {
+  loading.value = true
+  api.UserAPi.listByPage(paginationData.page, paginationData.size)
+    .then((res) => {
+      tableData.value = res.data.data
+      paginationData.totalCount = res.data.totalCount
+    })
+    .catch(() => (tableData.value = new Array<UserDto>()))
+    .finally(() => (loading.value = false))
+}
+
+const handleRefresh = () => {
+  fetchTableData()
+}
+//end select
+
+/** 监听分页参数变化*/
+watch([() => paginationData.page, () => paginationData.size], fetchTableData, { immediate: true })
 </script>
 <template>
   <div class="app-container">
-    <div class="table-wrapper">
-      <el-table :data="tableData" header-cell-class-name="table-header">
-        <el-table-column type="selection" width="50" align="center" />
-        <el-table-column prop="username" label="用户名" align="center" />
-        <el-table-column prop="nickName" label="真实姓名" align="center" />
-        <el-table-column prop="phone" label="手机号" align="center" />
-        <el-table-column prop="email" label="邮箱" align="center" />
-        <el-table-column prop="createAt" label="创建时间" align="center" />
-        <el-table-column fixed="right" label="操作" width="150" align="center">
-          <template #default="scope">
-            <el-button type="primary" text bg size="small" @click="handleUpdate(scope.row)">修改</el-button>
-            <el-button type="danger" text bg size="small" @click="handleDelete(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-card v-loading="loading" shadow="never">
+      <div class="toolbar-wrapper">
+        <div>
+          <el-button type="primary" :icon="CirclePlus" @click="dialogVisible = true">新增用户</el-button>
+        </div>
+        <div>
+          <el-tooltip content="刷新表格">
+            <el-button type="primary" :icon="RefreshRight" circle @click="handleRefresh" />
+          </el-tooltip>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <el-table :data="tableData" header-cell-class-name="table-header">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column prop="username" label="用户名" align="center" />
+          <el-table-column prop="nickName" label="真实姓名" align="center" />
+          <el-table-column prop="phone" label="手机号" align="center" />
+          <el-table-column prop="email" label="邮箱" align="center" />
+          <el-table-column prop="createAt" label="创建时间" align="center" />
+          <el-table-column fixed="right" label="操作" width="150" align="center">
+            <template #default="scope">
+              <el-button type="primary" text bg size="small" @click="handleUpdate(scope.row)">修改</el-button>
+              <el-button type="danger" text bg size="small" @click="handleDelete(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="pager-wrapper">
+        <el-pagination
+          background
+          :layout="paginationData.layout"
+          :page-sizes="paginationData.pageSizes"
+          :total="paginationData.totalCount"
+          :page-size="paginationData.size"
+          :currentPage="paginationData.page"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
+    </el-card>
+    <!-- 新增/修改 -->
+    <el-dialog
+      v-model="dialogVisible"
+      :title="currentUpdateId === undefined ? '新增用户' : '修改用户'"
+      @close="resetForm"
+      width="30%"
+    >
+      <el-form ref="formRef" :model="formData" :rules="formRules" label-width="100px" label-position="left">
+        <el-form-item prop="username" label="账号">
+          <el-input v-model="formData.username" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item prop="password" label="密码">
+          <el-input v-model="formData.password" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item prop="nickName" label="昵称">
+          <el-input v-model="formData.nickName" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item prop="email" label="邮箱">
+          <el-input v-model="formData.email" placeholder="请输入" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleCreate">确认</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.toolbar-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.table-wrapper {
+  margin-bottom: 20px;
+  :deep(.table-header) {
+    background-color: var(--el-fill-color-light) !important;
+  }
+}
+.pager-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

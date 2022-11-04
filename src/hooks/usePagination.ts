@@ -1,27 +1,27 @@
 import { reactive } from "vue"
 
 interface IDefaultPaginationData {
-  total: number
-  currentPage: number
+  totalCount: number
+  page: number
   pageSizes: number[]
-  pageSize: number
+  size: number
   layout: string
 }
 
 interface IPaginationData {
-  total?: number
-  currentPage?: number
+  totalCount?: number
+  page?: number
   pageSizes?: number[]
-  pageSize?: number
+  size?: number
   layout?: string
 }
 
 /** 默认的分页参数 */
 const defaultPaginationData: IDefaultPaginationData = {
-  total: 0,
-  currentPage: 1,
+  totalCount: 0,
+  page: 1,
   pageSizes: [10, 20, 50],
-  pageSize: 10,
+  size: 10,
   layout: "total, sizes, prev, pager, next, jumper"
 }
 
@@ -31,12 +31,12 @@ export const usePagination = (_paginationData: IPaginationData = {}) => {
 
   /** 改变当前页码 */
   const handleCurrentChange = (value: number) => {
-    paginationData.currentPage = value
+    paginationData.page = value
   }
 
   /** 改变页面大小 */
   const handleSizeChange = (value: number) => {
-    paginationData.pageSize = value
+    paginationData.size = value
   }
 
   return { paginationData, handleCurrentChange, handleSizeChange }

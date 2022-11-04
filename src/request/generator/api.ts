@@ -87,6 +87,18 @@ export interface CreateUserRequest {
      * @memberof CreateUserRequest
      */
     nickName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserRequest
+     */
+    phone?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserRequest
+     */
+    email: string;
 }
 /**
  * 
@@ -315,6 +327,18 @@ export interface UserDto {
      * @memberof UserDto
      */
     nickName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDto
+     */
+    phone: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserDto
+     */
+    email: string;
     /**
      * 
      * @type {RoleDto}
