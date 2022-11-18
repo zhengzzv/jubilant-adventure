@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { reactive, ref, watch } from "vue"
-import { UserDto } from "@/request/generator"
+import { onMounted, reactive, ref, watch } from "vue"
+import { RoleDto, UserDto } from "@/request/generator"
 import { api } from "@/utils/service"
 import { CirclePlus, RefreshRight } from "@element-plus/icons-vue"
 import { ElMessageBox, ElMessage, FormInstance, FormRules } from "element-plus"
@@ -8,6 +8,13 @@ import { usePagination } from "@/hooks/usePagination"
 
 const loading = ref<boolean>(false)
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
+const roles = ref<Array<RoleDto>>()
+
+const fetchRoles = () => {
+  api.RoleApi.listRoleByPage(1, 999)
+    .then((res) => (roles.value = res.data.data))
+    .catch(() => (roles.value = new Array<RoleDto>()))
+}
 
 // start create
 const dialogVisible = ref<boolean>(false)
@@ -17,13 +24,15 @@ const formData = reactive({
   nickName: "",
   password: "",
   email: "",
-  phone: ""
+  phone: "",
+  role: ""
 })
 const formRules: FormRules = reactive({
   username: [{ required: true, trigger: "blur", message: "请输入用户名" }],
   nickname: [{ required: true, trigger: "blur", message: "请输入昵称" }],
   password: [{ required: true, trigger: "blur", message: "请输入密码" }],
-  email: [{ required: true, trigger: "blur", message: "请输入邮箱" }]
+  email: [{ required: true, trigger: "blur", message: "请输入邮箱" }],
+  role: [{ required: true, trigger: "blur", message: "请选择角色" }]
 })
 
 const handleCreate = () => {
@@ -34,6 +43,7 @@ const handleCreate = () => {
         password: formData.password,
         nickName: formData.nickName,
         avatar: "",
+        role: Number.parseInt(formData.role),
         email: formData.email
       }).then(() => {
         ElMessage.success("新增成功")
@@ -50,6 +60,9 @@ const resetForm = () => {
   currentUpdateId.value = undefined
   formData.username = ""
   formData.password = ""
+  formData.email = ""
+  formData.phone = ""
+  formData.role = ""
 }
 //start delete
 const handleDelete = (row: UserDto) => {
@@ -74,6 +87,8 @@ const handleUpdate = (userDto: UserDto) => {
   formData.nickName = userDto.nickName
   formData.email = userDto.email
   formData.phone = userDto.phone
+  formData.role = ""
+  currentUpdateId.value = userDto.id.toString()
   dialogVisible.value = true
 }
 //end update
@@ -83,7 +98,7 @@ const tableData = ref<Array<UserDto>>()
 
 const fetchTableData = () => {
   loading.value = true
-  api.UserAPi.listByPage(paginationData.page, paginationData.size)
+  api.UserAPi.listUserByPage(paginationData.page, paginationData.size)
     .then((res) => {
       tableData.value = res.data.data
       paginationData.totalCount = res.data.totalCount
@@ -99,6 +114,7 @@ const handleRefresh = () => {
 
 /** 监听分页参数变化*/
 watch([() => paginationData.page, () => paginationData.size], fetchTableData, { immediate: true })
+onMounted(() => fetchRoles())
 </script>
 <template>
   <div class="app-container">
@@ -149,18 +165,26 @@ watch([() => paginationData.page, () => paginationData.size], fetchTableData, { 
       @close="resetForm"
       width="30%"
     >
-      <el-form ref="formRef" :model="formData" :rules="formRules" label-width="100px" label-position="left">
+      <el-form ref="formRef" :model="formData" :rules="formRules" label-width="auto">
         <el-form-item prop="username" label="账号">
-          <el-input v-model="formData.username" placeholder="请输入" />
+          <el-input v-model="formData.username" />
         </el-form-item>
-        <el-form-item prop="password" label="密码">
-          <el-input v-model="formData.password" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item prop="nickName" label="昵称">
-          <el-input v-model="formData.nickName" placeholder="请输入" />
+        <el-form-item v-if="currentUpdateId === undefined" prop="password" label="密码">
+          <el-input type="password" v-model="formData.password" show-password />
         </el-form-item>
         <el-form-item prop="email" label="邮箱">
-          <el-input v-model="formData.email" placeholder="请输入" />
+          <el-input v-model="formData.email" />
+        </el-form-item>
+        <el-form-item prop="phone" label="手机号">
+          <el-input v-model="formData.phone" />
+        </el-form-item>
+        <el-form-item prop="nickName" label="昵称">
+          <el-input v-model="formData.nickName" />
+        </el-form-item>
+        <el-form-item prop="role" label="角色">
+          <el-select v-model="formData.role" placeholder="选择用户角色">
+            <el-option v-for="item in roles" :key="item.code" :label="item.name" :value="item.id" />
+          </el-select>
         </el-form-item>
       </el-form>
       <template #footer>

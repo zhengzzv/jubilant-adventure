@@ -22,83 +22,95 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
- * @interface ChangePasswordRequest
+ * @interface ChangePasswordCommand
  */
-export interface ChangePasswordRequest {
+export interface ChangePasswordCommand {
     /**
      * 
      * @type {string}
-     * @memberof ChangePasswordRequest
+     * @memberof ChangePasswordCommand
      */
     oldPassword: string;
     /**
      * 
      * @type {string}
-     * @memberof ChangePasswordRequest
+     * @memberof ChangePasswordCommand
      */
     newPassword: string;
 }
 /**
  * 
  * @export
- * @interface CreateRoleRequest
+ * @interface CreateRoleCommand
  */
-export interface CreateRoleRequest {
+export interface CreateRoleCommand {
     /**
      * 
      * @type {string}
-     * @memberof CreateRoleRequest
+     * @memberof CreateRoleCommand
      */
     code: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateRoleRequest
+     * @memberof CreateRoleCommand
      */
     name: string;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof CreateRoleCommand
+     */
+    permission?: Array<number>;
 }
 /**
  * 
  * @export
- * @interface CreateUserRequest
+ * @interface CreateUserCommand
  */
-export interface CreateUserRequest {
+export interface CreateUserCommand {
     /**
      * 
      * @type {string}
-     * @memberof CreateUserRequest
+     * @memberof CreateUserCommand
      */
     username: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateUserRequest
+     * @memberof CreateUserCommand
      */
     password: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateUserRequest
+     * @memberof CreateUserCommand
      */
     avatar: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateUserRequest
+     * @memberof CreateUserCommand
      */
     nickName: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateUserRequest
+     * @memberof CreateUserCommand
      */
     phone?: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateUserRequest
+     * @memberof CreateUserCommand
      */
     email: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateUserCommand
+     */
+    role: number;
 }
 /**
  * 
@@ -122,74 +134,123 @@ export interface ErrorMessage {
 /**
  * 
  * @export
- * @interface LoginRequest
+ * @interface LoginCommand
  */
-export interface LoginRequest {
+export interface LoginCommand {
     /**
      * 
      * @type {string}
-     * @memberof LoginRequest
+     * @memberof LoginCommand
      */
     username: string;
     /**
      * 
      * @type {string}
-     * @memberof LoginRequest
+     * @memberof LoginCommand
      */
     password: string;
     /**
      * 
      * @type {string}
-     * @memberof LoginRequest
+     * @memberof LoginCommand
      */
     code: string;
 }
 /**
  * 
  * @export
- * @interface PageDtoUserDto
+ * @interface PageRoleDto
  */
-export interface PageDtoUserDto {
+export interface PageRoleDto {
     /**
      * 
      * @type {number}
-     * @memberof PageDtoUserDto
+     * @memberof PageRoleDto
      */
     page: number;
     /**
      * 
      * @type {number}
-     * @memberof PageDtoUserDto
+     * @memberof PageRoleDto
      */
     size: number;
     /**
      * 
      * @type {number}
-     * @memberof PageDtoUserDto
+     * @memberof PageRoleDto
      */
     totalCount: number;
     /**
      * 
-     * @type {Array<UserDto>}
-     * @memberof PageDtoUserDto
+     * @type {Array<RoleDto>}
+     * @memberof PageRoleDto
      */
-    data?: Array<UserDto>;
+    data?: Array<RoleDto>;
     /**
      * 
      * @type {number}
-     * @memberof PageDtoUserDto
+     * @memberof PageRoleDto
      */
     totalPages: number;
     /**
      * 
      * @type {boolean}
-     * @memberof PageDtoUserDto
+     * @memberof PageRoleDto
      */
     hasPrevious: boolean;
     /**
      * 
      * @type {boolean}
-     * @memberof PageDtoUserDto
+     * @memberof PageRoleDto
+     */
+    hasNext: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface PageUserDto
+ */
+export interface PageUserDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof PageUserDto
+     */
+    page: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageUserDto
+     */
+    size: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageUserDto
+     */
+    totalCount: number;
+    /**
+     * 
+     * @type {Array<UserDto>}
+     * @memberof PageUserDto
+     */
+    data?: Array<UserDto>;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageUserDto
+     */
+    totalPages: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PageUserDto
+     */
+    hasPrevious: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PageUserDto
      */
     hasNext: boolean;
 }
@@ -217,6 +278,12 @@ export interface PermissionDto {
      * @memberof PermissionDto
      */
     value: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PermissionDto
+     */
+    name: string;
     /**
      * 
      * @type {number}
@@ -294,6 +361,37 @@ export interface RoleDto {
 /**
  * 
  * @export
+ * @interface UpdateRoleCommand
+ */
+export interface UpdateRoleCommand {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateRoleCommand
+     */
+    id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateRoleCommand
+     */
+    name: string;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof UpdateRoleCommand
+     */
+    permissions?: Array<number>;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateRoleCommand
+     */
+    updateBy?: number;
+}
+/**
+ * 
+ * @export
  * @interface UserDto
  */
 export interface UserDto {
@@ -345,12 +443,6 @@ export interface UserDto {
      * @memberof UserDto
      */
     role?: RoleDto;
-    /**
-     * 
-     * @type {Array<PermissionDto>}
-     * @memberof UserDto
-     */
-    permissions?: Array<PermissionDto>;
     /**
      * 
      * @type {number}
@@ -517,14 +609,14 @@ export const RolesApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 创建自定义角色
          * @summary 创建角色
-         * @param {CreateRoleRequest} createRoleRequest 
+         * @param {CreateRoleCommand} createRoleCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createRole: async (createRoleRequest: CreateRoleRequest, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createRoleRequest' is not null or undefined
-            if (createRoleRequest === null || createRoleRequest === undefined) {
-                throw new RequiredError('createRoleRequest','Required parameter createRoleRequest was null or undefined when calling createRole.');
+        createRole: async (createRoleCommand: CreateRoleCommand, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createRoleCommand' is not null or undefined
+            if (createRoleCommand === null || createRoleCommand === undefined) {
+                throw new RequiredError('createRoleCommand','Required parameter createRoleCommand was null or undefined when calling createRole.');
             }
             const localVarPath = `/roles`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -561,13 +653,232 @@ export const RolesApiAxiosParamCreator = function (configuration?: Configuration
             localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof createRoleRequest !== 'string';
+            const nonString = typeof createRoleCommand !== 'string';
             const needsSerialization = nonString && configuration && configuration.isJsonMime
                 ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
                 : nonString;
             localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(createRoleRequest !== undefined ? createRoleRequest : {})
-                : (createRoleRequest || "");
+                ? JSON.stringify(createRoleCommand !== undefined ? createRoleCommand : {})
+                : (createRoleCommand || "");
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 删除角色，超级管理员角色不允许删除
+         * @summary 删除角色
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteRole: async (id: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteRole.');
+            }
+            const localVarPath = `/roles/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication httpAuth required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? await configuration.accessToken()
+                    : await configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+    
+            const queryParameters = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                queryParameters.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                queryParameters.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 获取权限列表
+         * @summary 获取权限列表
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPermission: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/roles/permissions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication httpAuth required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? await configuration.accessToken()
+                    : await configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+    
+            const queryParameters = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                queryParameters.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                queryParameters.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 分页的方式获取角色列表，支持排序
+         * @summary 分页获取角色
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {string} [sort] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listRoleByPage: async (page?: number, size?: number, sort?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/roles`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication httpAuth required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? await configuration.accessToken()
+                    : await configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
+
+
+    
+            const queryParameters = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                queryParameters.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                queryParameters.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 更新角色信息，可以同时保存角色所分配的权限
+         * @summary 更新角色
+         * @param {UpdateRoleCommand} updateRoleCommand 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRole: async (updateRoleCommand: UpdateRoleCommand, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateRoleCommand' is not null or undefined
+            if (updateRoleCommand === null || updateRoleCommand === undefined) {
+                throw new RequiredError('updateRoleCommand','Required parameter updateRoleCommand was null or undefined when calling updateRole.');
+            }
+            const localVarPath = `/roles`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication httpAuth required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? await configuration.accessToken()
+                    : await configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            const queryParameters = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                queryParameters.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                queryParameters.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const nonString = typeof updateRoleCommand !== 'string';
+            const needsSerialization = nonString && configuration && configuration.isJsonMime
+                ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
+                : nonString;
+            localVarRequestOptions.data =  needsSerialization
+                ? JSON.stringify(updateRoleCommand !== undefined ? updateRoleCommand : {})
+                : (updateRoleCommand || "");
 
             return {
                 url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
@@ -586,12 +897,69 @@ export const RolesApiFp = function(configuration?: Configuration) {
         /**
          * 创建自定义角色
          * @summary 创建角色
-         * @param {CreateRoleRequest} createRoleRequest 
+         * @param {CreateRoleCommand} createRoleCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createRole(createRoleRequest: CreateRoleRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
-            const localVarAxiosArgs = await RolesApiAxiosParamCreator(configuration).createRole(createRoleRequest, options);
+        async createRole(createRoleCommand: CreateRoleCommand, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
+            const localVarAxiosArgs = await RolesApiAxiosParamCreator(configuration).createRole(createRoleCommand, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 删除角色，超级管理员角色不允许删除
+         * @summary 删除角色
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteRole(id: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await RolesApiAxiosParamCreator(configuration).deleteRole(id, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 获取权限列表
+         * @summary 获取权限列表
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listPermission(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PermissionDto>>> {
+            const localVarAxiosArgs = await RolesApiAxiosParamCreator(configuration).listPermission(options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 分页的方式获取角色列表，支持排序
+         * @summary 分页获取角色
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {string} [sort] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listRoleByPage(page?: number, size?: number, sort?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PageRoleDto>> {
+            const localVarAxiosArgs = await RolesApiAxiosParamCreator(configuration).listRoleByPage(page, size, sort, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 更新角色信息，可以同时保存角色所分配的权限
+         * @summary 更新角色
+         * @param {UpdateRoleCommand} updateRoleCommand 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateRole(updateRoleCommand: UpdateRoleCommand, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await RolesApiAxiosParamCreator(configuration).updateRole(updateRoleCommand, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -609,12 +977,53 @@ export const RolesApiFactory = function (configuration?: Configuration, basePath
         /**
          * 创建自定义角色
          * @summary 创建角色
-         * @param {CreateRoleRequest} createRoleRequest 
+         * @param {CreateRoleCommand} createRoleCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createRole(createRoleRequest: CreateRoleRequest, options?: any): AxiosPromise<number> {
-            return RolesApiFp(configuration).createRole(createRoleRequest, options).then((request) => request(axios, basePath));
+        createRole(createRoleCommand: CreateRoleCommand, options?: any): AxiosPromise<number> {
+            return RolesApiFp(configuration).createRole(createRoleCommand, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 删除角色，超级管理员角色不允许删除
+         * @summary 删除角色
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteRole(id: number, options?: any): AxiosPromise<void> {
+            return RolesApiFp(configuration).deleteRole(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 获取权限列表
+         * @summary 获取权限列表
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPermission(options?: any): AxiosPromise<Array<PermissionDto>> {
+            return RolesApiFp(configuration).listPermission(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 分页的方式获取角色列表，支持排序
+         * @summary 分页获取角色
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {string} [sort] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listRoleByPage(page?: number, size?: number, sort?: string, options?: any): AxiosPromise<PageRoleDto> {
+            return RolesApiFp(configuration).listRoleByPage(page, size, sort, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 更新角色信息，可以同时保存角色所分配的权限
+         * @summary 更新角色
+         * @param {UpdateRoleCommand} updateRoleCommand 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRole(updateRoleCommand: UpdateRoleCommand, options?: any): AxiosPromise<void> {
+            return RolesApiFp(configuration).updateRole(updateRoleCommand, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -629,13 +1038,62 @@ export class RolesApi extends BaseAPI {
     /**
      * 创建自定义角色
      * @summary 创建角色
-     * @param {CreateRoleRequest} createRoleRequest 
+     * @param {CreateRoleCommand} createRoleCommand 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RolesApi
      */
-    public createRole(createRoleRequest: CreateRoleRequest, options?: any) {
-        return RolesApiFp(this.configuration).createRole(createRoleRequest, options).then((request) => request(this.axios, this.basePath));
+    public createRole(createRoleCommand: CreateRoleCommand, options?: any) {
+        return RolesApiFp(this.configuration).createRole(createRoleCommand, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 删除角色，超级管理员角色不允许删除
+     * @summary 删除角色
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesApi
+     */
+    public deleteRole(id: number, options?: any) {
+        return RolesApiFp(this.configuration).deleteRole(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 获取权限列表
+     * @summary 获取权限列表
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesApi
+     */
+    public listPermission(options?: any) {
+        return RolesApiFp(this.configuration).listPermission(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 分页的方式获取角色列表，支持排序
+     * @summary 分页获取角色
+     * @param {number} [page] 
+     * @param {number} [size] 
+     * @param {string} [sort] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesApi
+     */
+    public listRoleByPage(page?: number, size?: number, sort?: string, options?: any) {
+        return RolesApiFp(this.configuration).listRoleByPage(page, size, sort, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 更新角色信息，可以同时保存角色所分配的权限
+     * @summary 更新角色
+     * @param {UpdateRoleCommand} updateRoleCommand 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RolesApi
+     */
+    public updateRole(updateRoleCommand: UpdateRoleCommand, options?: any) {
+        return RolesApiFp(this.configuration).updateRole(updateRoleCommand, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -649,14 +1107,14 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 当前登陆用户修改密码
          * @summary 修改密码
-         * @param {ChangePasswordRequest} changePasswordRequest 
+         * @param {ChangePasswordCommand} changePasswordCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        changeUserPwd: async (changePasswordRequest: ChangePasswordRequest, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'changePasswordRequest' is not null or undefined
-            if (changePasswordRequest === null || changePasswordRequest === undefined) {
-                throw new RequiredError('changePasswordRequest','Required parameter changePasswordRequest was null or undefined when calling changeUserPwd.');
+        changeUserPwd: async (changePasswordCommand: ChangePasswordCommand, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'changePasswordCommand' is not null or undefined
+            if (changePasswordCommand === null || changePasswordCommand === undefined) {
+                throw new RequiredError('changePasswordCommand','Required parameter changePasswordCommand was null or undefined when calling changeUserPwd.');
             }
             const localVarPath = `/users/password`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -693,13 +1151,71 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof changePasswordRequest !== 'string';
+            const nonString = typeof changePasswordCommand !== 'string';
             const needsSerialization = nonString && configuration && configuration.isJsonMime
                 ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
                 : nonString;
             localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(changePasswordRequest !== undefined ? changePasswordRequest : {})
-                : (changePasswordRequest || "");
+                ? JSON.stringify(changePasswordCommand !== undefined ? changePasswordCommand : {})
+                : (changePasswordCommand || "");
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 给用户分配角色
+         * @summary 修改用户的角色
+         * @param {number} userId 
+         * @param {number} roleId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        changeUserRole: async (userId: number, roleId: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            if (userId === null || userId === undefined) {
+                throw new RequiredError('userId','Required parameter userId was null or undefined when calling changeUserRole.');
+            }
+            // verify required parameter 'roleId' is not null or undefined
+            if (roleId === null || roleId === undefined) {
+                throw new RequiredError('roleId','Required parameter roleId was null or undefined when calling changeUserRole.');
+            }
+            const localVarPath = `/users/{userId}/roles/{roleId}`
+                .replace(`{${"userId"}}`, encodeURIComponent(String(userId)))
+                .replace(`{${"roleId"}}`, encodeURIComponent(String(roleId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication httpAuth required
+            // http bearer authentication required
+            if (configuration && configuration.accessToken) {
+                const accessToken = typeof configuration.accessToken === 'function'
+                    ? await configuration.accessToken()
+                    : await configuration.accessToken;
+                localVarHeaderParameter["Authorization"] = "Bearer " + accessToken;
+            }
+
+
+    
+            const queryParameters = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                queryParameters.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                queryParameters.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
@@ -709,14 +1225,14 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 创建用户
          * @summary 创建用户
-         * @param {CreateUserRequest} createUserRequest 
+         * @param {CreateUserCommand} createUserCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUser: async (createUserRequest: CreateUserRequest, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createUserRequest' is not null or undefined
-            if (createUserRequest === null || createUserRequest === undefined) {
-                throw new RequiredError('createUserRequest','Required parameter createUserRequest was null or undefined when calling createUser.');
+        createUser: async (createUserCommand: CreateUserCommand, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createUserCommand' is not null or undefined
+            if (createUserCommand === null || createUserCommand === undefined) {
+                throw new RequiredError('createUserCommand','Required parameter createUserCommand was null or undefined when calling createUser.');
             }
             const localVarPath = `/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -753,13 +1269,13 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof createUserRequest !== 'string';
+            const nonString = typeof createUserCommand !== 'string';
             const needsSerialization = nonString && configuration && configuration.isJsonMime
                 ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
                 : nonString;
             localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(createUserRequest !== undefined ? createUserRequest : {})
-                : (createUserRequest || "");
+                ? JSON.stringify(createUserCommand !== undefined ? createUserCommand : {})
+                : (createUserCommand || "");
 
             return {
                 url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
@@ -873,7 +1389,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listByPage: async (page?: number, size?: number, sort?: string, options: any = {}): Promise<RequestArgs> => {
+        listUserByPage: async (page?: number, size?: number, sort?: string, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -928,14 +1444,14 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 输入用户名和密码，登陆管理后台
          * @summary 用户登陆
-         * @param {LoginRequest} loginRequest 
+         * @param {LoginCommand} loginCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        login: async (loginRequest: LoginRequest, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'loginRequest' is not null or undefined
-            if (loginRequest === null || loginRequest === undefined) {
-                throw new RequiredError('loginRequest','Required parameter loginRequest was null or undefined when calling login.');
+        login: async (loginCommand: LoginCommand, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'loginCommand' is not null or undefined
+            if (loginCommand === null || loginCommand === undefined) {
+                throw new RequiredError('loginCommand','Required parameter loginCommand was null or undefined when calling login.');
             }
             const localVarPath = `/users/login`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -963,13 +1479,13 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             localVarUrlObj.search = (new URLSearchParams(queryParameters)).toString();
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const nonString = typeof loginRequest !== 'string';
+            const nonString = typeof loginCommand !== 'string';
             const needsSerialization = nonString && configuration && configuration.isJsonMime
                 ? configuration.isJsonMime(localVarRequestOptions.headers['Content-Type'])
                 : nonString;
             localVarRequestOptions.data =  needsSerialization
-                ? JSON.stringify(loginRequest !== undefined ? loginRequest : {})
-                : (loginRequest || "");
+                ? JSON.stringify(loginCommand !== undefined ? loginCommand : {})
+                : (loginCommand || "");
 
             return {
                 url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
@@ -1071,12 +1587,27 @@ export const UsersApiFp = function(configuration?: Configuration) {
         /**
          * 当前登陆用户修改密码
          * @summary 修改密码
-         * @param {ChangePasswordRequest} changePasswordRequest 
+         * @param {ChangePasswordCommand} changePasswordCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async changeUserPwd(changePasswordRequest: ChangePasswordRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).changeUserPwd(changePasswordRequest, options);
+        async changeUserPwd(changePasswordCommand: ChangePasswordCommand, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).changeUserPwd(changePasswordCommand, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 给用户分配角色
+         * @summary 修改用户的角色
+         * @param {number} userId 
+         * @param {number} roleId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async changeUserRole(userId: number, roleId: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).changeUserRole(userId, roleId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -1085,12 +1616,12 @@ export const UsersApiFp = function(configuration?: Configuration) {
         /**
          * 创建用户
          * @summary 创建用户
-         * @param {CreateUserRequest} createUserRequest 
+         * @param {CreateUserCommand} createUserCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createUser(createUserRequest: CreateUserRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).createUser(createUserRequest, options);
+        async createUser(createUserCommand: CreateUserCommand, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).createUser(createUserCommand, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -1116,7 +1647,7 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteUser(id: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async deleteUser(id: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).deleteUser(id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
@@ -1132,8 +1663,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listByPage(page?: number, size?: number, sort?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PageDtoUserDto>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).listByPage(page, size, sort, options);
+        async listUserByPage(page?: number, size?: number, sort?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PageUserDto>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).listUserByPage(page, size, sort, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -1142,12 +1673,12 @@ export const UsersApiFp = function(configuration?: Configuration) {
         /**
          * 输入用户名和密码，登陆管理后台
          * @summary 用户登陆
-         * @param {LoginRequest} loginRequest 
+         * @param {LoginCommand} loginCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async login(loginRequest: LoginRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).login(loginRequest, options);
+        async login(loginCommand: LoginCommand, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).login(loginCommand, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: (configuration?.basePath || basePath) + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -1191,22 +1722,33 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
         /**
          * 当前登陆用户修改密码
          * @summary 修改密码
-         * @param {ChangePasswordRequest} changePasswordRequest 
+         * @param {ChangePasswordCommand} changePasswordCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        changeUserPwd(changePasswordRequest: ChangePasswordRequest, options?: any): AxiosPromise<void> {
-            return UsersApiFp(configuration).changeUserPwd(changePasswordRequest, options).then((request) => request(axios, basePath));
+        changeUserPwd(changePasswordCommand: ChangePasswordCommand, options?: any): AxiosPromise<void> {
+            return UsersApiFp(configuration).changeUserPwd(changePasswordCommand, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 给用户分配角色
+         * @summary 修改用户的角色
+         * @param {number} userId 
+         * @param {number} roleId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        changeUserRole(userId: number, roleId: number, options?: any): AxiosPromise<void> {
+            return UsersApiFp(configuration).changeUserRole(userId, roleId, options).then((request) => request(axios, basePath));
         },
         /**
          * 创建用户
          * @summary 创建用户
-         * @param {CreateUserRequest} createUserRequest 
+         * @param {CreateUserCommand} createUserCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUser(createUserRequest: CreateUserRequest, options?: any): AxiosPromise<number> {
-            return UsersApiFp(configuration).createUser(createUserRequest, options).then((request) => request(axios, basePath));
+        createUser(createUserCommand: CreateUserCommand, options?: any): AxiosPromise<number> {
+            return UsersApiFp(configuration).createUser(createUserCommand, options).then((request) => request(axios, basePath));
         },
         /**
          * 获取当前用户信息，包括基本信息/权限/角色等，但是不包括密码
@@ -1224,7 +1766,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUser(id: number, options?: any): AxiosPromise<string> {
+        deleteUser(id: number, options?: any): AxiosPromise<void> {
             return UsersApiFp(configuration).deleteUser(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1236,18 +1778,18 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listByPage(page?: number, size?: number, sort?: string, options?: any): AxiosPromise<PageDtoUserDto> {
-            return UsersApiFp(configuration).listByPage(page, size, sort, options).then((request) => request(axios, basePath));
+        listUserByPage(page?: number, size?: number, sort?: string, options?: any): AxiosPromise<PageUserDto> {
+            return UsersApiFp(configuration).listUserByPage(page, size, sort, options).then((request) => request(axios, basePath));
         },
         /**
          * 输入用户名和密码，登陆管理后台
          * @summary 用户登陆
-         * @param {LoginRequest} loginRequest 
+         * @param {LoginCommand} loginCommand 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        login(loginRequest: LoginRequest, options?: any): AxiosPromise<void> {
-            return UsersApiFp(configuration).login(loginRequest, options).then((request) => request(axios, basePath));
+        login(loginCommand: LoginCommand, options?: any): AxiosPromise<void> {
+            return UsersApiFp(configuration).login(loginCommand, options).then((request) => request(axios, basePath));
         },
         /**
          * 登陆时获取验证码
@@ -1280,25 +1822,38 @@ export class UsersApi extends BaseAPI {
     /**
      * 当前登陆用户修改密码
      * @summary 修改密码
-     * @param {ChangePasswordRequest} changePasswordRequest 
+     * @param {ChangePasswordCommand} changePasswordCommand 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public changeUserPwd(changePasswordRequest: ChangePasswordRequest, options?: any) {
-        return UsersApiFp(this.configuration).changeUserPwd(changePasswordRequest, options).then((request) => request(this.axios, this.basePath));
+    public changeUserPwd(changePasswordCommand: ChangePasswordCommand, options?: any) {
+        return UsersApiFp(this.configuration).changeUserPwd(changePasswordCommand, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 给用户分配角色
+     * @summary 修改用户的角色
+     * @param {number} userId 
+     * @param {number} roleId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public changeUserRole(userId: number, roleId: number, options?: any) {
+        return UsersApiFp(this.configuration).changeUserRole(userId, roleId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 创建用户
      * @summary 创建用户
-     * @param {CreateUserRequest} createUserRequest 
+     * @param {CreateUserCommand} createUserCommand 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public createUser(createUserRequest: CreateUserRequest, options?: any) {
-        return UsersApiFp(this.configuration).createUser(createUserRequest, options).then((request) => request(this.axios, this.basePath));
+    public createUser(createUserCommand: CreateUserCommand, options?: any) {
+        return UsersApiFp(this.configuration).createUser(createUserCommand, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1334,20 +1889,20 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public listByPage(page?: number, size?: number, sort?: string, options?: any) {
-        return UsersApiFp(this.configuration).listByPage(page, size, sort, options).then((request) => request(this.axios, this.basePath));
+    public listUserByPage(page?: number, size?: number, sort?: string, options?: any) {
+        return UsersApiFp(this.configuration).listUserByPage(page, size, sort, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 输入用户名和密码，登陆管理后台
      * @summary 用户登陆
-     * @param {LoginRequest} loginRequest 
+     * @param {LoginCommand} loginCommand 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public login(loginRequest: LoginRequest, options?: any) {
-        return UsersApiFp(this.configuration).login(loginRequest, options).then((request) => request(this.axios, this.basePath));
+    public login(loginCommand: LoginCommand, options?: any) {
+        return UsersApiFp(this.configuration).login(loginCommand, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

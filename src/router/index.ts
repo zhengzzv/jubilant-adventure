@@ -1,5 +1,4 @@
 import { type RouteRecordRaw, createRouter, createWebHashHistory, createWebHistory } from "vue-router"
-import layout from "@/config/layout"
 
 const Layout = () => import("@/layout/index.vue")
 
@@ -56,6 +55,13 @@ export const constantRoutes: RouteRecordRaw[] = [
         }
       }
     ]
+  },
+  {
+    path: "/userInfo",
+    component: () => import("@/views/user/about/index.vue"),
+    meta: {
+      hidden: true
+    }
   },
   {
     path: "/table",
@@ -147,6 +153,30 @@ export const asyncRoutes: RouteRecordRaw[] = [
       }
     ]
   },
+  {
+    path: "/role-manager",
+    component: Layout,
+    name: "Roles",
+    redirect: "/roles",
+    meta: {
+      title: "角色管理",
+      svgIcon: "lock",
+      roles: ["SUPER_ADMIN"],
+      alwaysShow: true
+    },
+    children: [
+      {
+        path: "/roles",
+        component: () => import("@/views/role/index.vue"),
+        name: "Role List",
+        meta: {
+          title: "角色列表",
+          roles: ["SUPER_ADMIN"]
+        }
+      }
+    ]
+  },
+
   {
     path: "/:pathMatch(.*)*", // Must put the 'ErrorPage' route at the end, 必须将 'ErrorPage' 路由放在最后
     redirect: "/404",

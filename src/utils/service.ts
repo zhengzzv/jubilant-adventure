@@ -2,7 +2,7 @@ import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios"
 import { useUserStoreHook } from "@/store/modules/user"
 import { ElMessage } from "element-plus"
 import { get } from "lodash-es"
-import { Configuration, UsersApi, FilesApi } from "@/request/generator"
+import { Configuration, UsersApi, FilesApi, RolesApi } from "@/request/generator"
 import { getToken } from "@/utils/cache/localStorage"
 
 /** 创建请求实例 */
@@ -96,5 +96,6 @@ export const request = createRequestFunction(service)
 
 export const api = {
   UserAPi: new UsersApi(new Configuration({}), "", service),
+  RoleApi: new RolesApi(new Configuration({}), "", service),
   FileApi: new FilesApi(new Configuration({}), "", service)
 }
