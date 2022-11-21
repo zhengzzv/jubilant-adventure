@@ -5,7 +5,7 @@ import { useUserStore } from "@/store/modules/user"
 import { User, Lock, Key } from "@element-plus/icons-vue"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import { type FormInstance, FormRules } from "element-plus"
-import { LoginRequest } from "@/request/generator"
+import { LoginCommand } from "@/request/generator"
 import ImageVerify from "@/components/verifyCode/index.vue"
 
 const router = useRouter()
@@ -16,7 +16,7 @@ const loading = ref(false)
 /** 验证码图片 URL */
 const code = ref("")
 /** 登录表单数据 */
-const loginForm: LoginRequest = reactive({
+const loginForm: LoginCommand = reactive({
   username: "lingxi",
   password: "12345678",
   code: code.value

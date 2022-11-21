@@ -5,6 +5,7 @@ import { api } from "@/utils/service"
 import { CirclePlus, RefreshRight } from "@element-plus/icons-vue"
 import { ElMessageBox, ElMessage, FormInstance, FormRules } from "element-plus"
 import { usePagination } from "@/hooks/usePagination"
+import { validEmail, validPhone } from "@/utils/validate"
 
 const loading = ref<boolean>(false)
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
@@ -30,8 +31,15 @@ const formData = reactive({
 const formRules: FormRules = reactive({
   username: [{ required: true, trigger: "blur", message: "请输入用户名" }],
   nickname: [{ required: true, trigger: "blur", message: "请输入昵称" }],
-  password: [{ required: true, trigger: "blur", message: "请输入密码" }],
-  email: [{ required: true, trigger: "blur", message: "请输入邮箱" }],
+  password: [
+    { required: true, message: "请输入密码", trigger: "blur" },
+    { min: 8, max: 16, message: "长度在 8 到 16 个字符", trigger: "blur" }
+  ],
+  phone: [{ validator: validPhone, trigger: "blur" }],
+  email: [
+    { required: true, trigger: "blur", message: "请输入邮箱" },
+    { validator: validEmail, trigger: "blur" }
+  ],
   role: [{ required: true, trigger: "blur", message: "请选择角色" }]
 })
 
@@ -60,6 +68,7 @@ const resetForm = () => {
   currentUpdateId.value = undefined
   formData.username = ""
   formData.password = ""
+  formData.nickName = ""
   formData.email = ""
   formData.phone = ""
   formData.role = ""
@@ -133,7 +142,7 @@ onMounted(() => fetchRoles())
         <el-table :data="tableData" header-cell-class-name="table-header">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column prop="username" label="用户名" align="center" />
-          <el-table-column prop="nickName" label="真实姓名" align="center" />
+          <el-table-column prop="nickName" label="昵称" align="center" />
           <el-table-column prop="phone" label="手机号" align="center" />
           <el-table-column prop="email" label="邮箱" align="center" />
           <el-table-column prop="createAt" label="创建时间" align="center" />
@@ -182,7 +191,7 @@ onMounted(() => fetchRoles())
           <el-input v-model="formData.nickName" />
         </el-form-item>
         <el-form-item prop="role" label="角色">
-          <el-select v-model="formData.role" placeholder="选择用户角色">
+          <el-select v-model="formData.role" clearable="true" placeholder="选择用户角色">
             <el-option v-for="item in roles" :key="item.code" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
@@ -205,6 +214,9 @@ onMounted(() => fetchRoles())
   :deep(.table-header) {
     background-color: var(--el-fill-color-light) !important;
   }
+}
+.el-select {
+  width: 100%;
 }
 .pager-wrapper {
   display: flex;

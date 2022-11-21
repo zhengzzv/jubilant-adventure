@@ -49,6 +49,9 @@ function createService() {
         case 408:
           error.message = "请求超时"
           break
+        case 409:
+          error.message = errMsg.message
+          break
         case 500:
           error.message = "服务器内部错误"
           break

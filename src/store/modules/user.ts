@@ -5,7 +5,7 @@ import { removeToken, setToken } from "@/utils/cache/localStorage"
 import { resetRouter } from "@/router"
 import { api } from "@/utils/service"
 import { ElMessage } from "element-plus"
-import { LoginRequest, UserDto } from "@/request/generator"
+import { LoginCommand, UserDto } from "@/request/generator"
 
 export const useUserStore = defineStore("user", () => {
   const token = ref<string>("")
@@ -17,7 +17,7 @@ export const useUserStore = defineStore("user", () => {
     roles.value = value
   }
   /** 登录 */
-  const login = async (request: LoginRequest) => {
+  const login = async (request: LoginCommand) => {
     const response = await api.UserAPi.login(request)
     const jwt = response.headers.authorization
     if (jwt) {
