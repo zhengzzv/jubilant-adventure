@@ -11,7 +11,7 @@ export default (configEnv: ConfigEnv): UserConfigExport => {
   const viteEnv = loadEnv(configEnv.mode, process.cwd()) as ImportMetaEnv
   const { VITE_PUBLIC_PATH } = viteEnv
   return {
-    /** 打包时根据实际情况修改 base */
+    /** 打包时根据实际情况修改  */
     base: VITE_PUBLIC_PATH,
     resolve: {
       alias: {
