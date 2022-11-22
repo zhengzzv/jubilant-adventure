@@ -22,21 +22,23 @@ export const isValidURL = (url: string) => {
 
 export const validPhone = (rule: any, value: any, cb: any) => {
   const regMobile = /^(0|86|17951)?(13[0-9]|15[0123456789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
-  if (regMobile.test(value)) {
+  if (rule.required && !regMobile.test(value)) {
+    //手机号不合法
+    cb(new Error("请输入合法的手机号！"))
+  } else {
     //合法的手机号
     return cb()
   }
-  //手机号不合法
-  cb(new Error("请输入合法的手机号！"))
 }
 
 export const validEmail = (rule: any, value: any, cb: any) => {
   //验证邮箱的正则表达式
   const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
-  if (regEmail.test(value)) {
+  if (rule.required && !regEmail.test(value)) {
+    //邮箱不合法
+    cb(new Error("请输入合法的邮箱！"))
+  } else {
     //合法的邮箱
     return cb()
   }
-  //邮箱不合法
-  cb(new Error("请输入合法的邮箱！"))
 }

@@ -21,6 +21,7 @@ const fetchRoles = () => {
 const dialogVisible = ref<boolean>(false)
 const formRef = ref<FormInstance | null>(null)
 const formData = reactive({
+  id: 0,
   username: "",
   nickName: "",
   password: "",
@@ -35,7 +36,7 @@ const formRules: FormRules = reactive({
     { required: true, message: "请输入密码", trigger: "blur" },
     { min: 8, max: 16, message: "长度在 8 到 16 个字符", trigger: "blur" }
   ],
-  phone: [{ validator: validPhone, trigger: "blur" }],
+  phone: [{ required: false }, { validator: validPhone, trigger: "blur" }],
   email: [
     { required: true, trigger: "blur", message: "请输入邮箱" },
     { validator: validEmail, trigger: "blur" }
@@ -46,18 +47,35 @@ const formRules: FormRules = reactive({
 const handleCreate = () => {
   formRef.value?.validate((valid: boolean) => {
     if (valid) {
-      api.UserAPi.createUser({
-        username: formData.username,
-        password: formData.password,
-        nickName: formData.nickName,
-        avatar: "",
-        role: Number.parseInt(formData.role),
-        email: formData.email
-      }).then(() => {
-        ElMessage.success("新增成功")
-        dialogVisible.value = false
-        fetchTableData()
-      })
+      if (currentUpdateId.value == undefined) {
+        api.UserAPi.createUser({
+          username: formData.username,
+          password: formData.password,
+          nickName: formData.nickName,
+          avatar: "",
+          phone: formData.phone,
+          role: Number.parseInt(formData.role),
+          email: formData.email
+        }).then(() => {
+          ElMessage.success("新增成功")
+          dialogVisible.value = false
+          fetchTableData()
+        })
+      } else {
+        api.UserAPi.updateUser({
+          id: formData.id,
+          avatar: "",
+          nickName: formData.nickName,
+          email: formData.email,
+          phone: formData.phone,
+          role: Number.parseInt(formData.role),
+          updateBy: 0
+        }).then(() => {
+          ElMessage.success("修改成功")
+          dialogVisible.value = false
+          fetchTableData()
+        })
+      }
     } else {
       return false
     }
@@ -66,6 +84,7 @@ const handleCreate = () => {
 
 const resetForm = () => {
   currentUpdateId.value = undefined
+  formData.id = -1
   formData.username = ""
   formData.password = ""
   formData.nickName = ""
@@ -92,6 +111,7 @@ const handleDelete = (row: UserDto) => {
 const currentUpdateId = ref<undefined | string>(undefined)
 
 const handleUpdate = (userDto: UserDto) => {
+  formData.id = userDto.id
   formData.username = userDto.username
   formData.nickName = userDto.nickName
   formData.email = userDto.email
@@ -175,7 +195,7 @@ onMounted(() => fetchRoles())
       width="30%"
     >
       <el-form ref="formRef" :model="formData" :rules="formRules" label-width="auto">
-        <el-form-item prop="username" label="账号">
+        <el-form-item v-if="currentUpdateId === undefined" prop="username" label="账号">
           <el-input v-model="formData.username" />
         </el-form-item>
         <el-form-item v-if="currentUpdateId === undefined" prop="password" label="密码">

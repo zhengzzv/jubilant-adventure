@@ -139,7 +139,7 @@ export const asyncRoutes: RouteRecordRaw[] = [
       title: "用户管理",
       svgIcon: "lock",
       roles: ["SUPER_ADMIN"],
-      alwaysShow: true
+      alwaysShow: false
     },
     children: [
       {
@@ -162,7 +162,7 @@ export const asyncRoutes: RouteRecordRaw[] = [
       title: "角色管理",
       svgIcon: "lock",
       roles: ["SUPER_ADMIN"],
-      alwaysShow: true
+      alwaysShow: false
     },
     children: [
       {

@@ -46,6 +46,7 @@ const handleLogin = () => {
         })
         .catch(() => {
           loginForm.password = ""
+          loginForm.code = ""
         })
         .finally(() => {
           loading.value = false
