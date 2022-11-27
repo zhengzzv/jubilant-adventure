@@ -116,7 +116,7 @@ const handleUpdate = (userDto: UserDto) => {
   formData.nickName = userDto.nickName
   formData.email = userDto.email
   formData.phone = userDto.phone
-  formData.role = ""
+  formData.role = userDto.role?.name || ""
   currentUpdateId.value = userDto.id.toString()
   dialogVisible.value = true
 }
@@ -165,6 +165,7 @@ onMounted(() => fetchRoles())
           <el-table-column prop="nickName" label="昵称" align="center" />
           <el-table-column prop="phone" label="手机号" align="center" />
           <el-table-column prop="email" label="邮箱" align="center" />
+          <el-table-column prop="role.name" label="角色" align="center" />
           <el-table-column prop="createAt" label="创建时间" align="center" />
           <el-table-column fixed="right" label="操作" width="150" align="center">
             <template #default="scope">
