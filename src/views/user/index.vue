@@ -5,7 +5,7 @@ import { api } from "@/utils/service"
 import { CirclePlus, RefreshRight } from "@element-plus/icons-vue"
 import { ElMessageBox, ElMessage, FormInstance, FormRules } from "element-plus"
 import { usePagination } from "@/hooks/usePagination"
-import { validEmail, validPhone } from "@/utils/validate"
+import { phoneReg, emailReg } from "@/utils/validate"
 
 const loading = ref<boolean>(false)
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
@@ -27,7 +27,7 @@ const formData = reactive({
   password: "",
   email: "",
   phone: "",
-  role: ""
+  roleId: ""
 })
 const formRules: FormRules = reactive({
   username: [{ required: true, trigger: "blur", message: "请输入用户名" }],
@@ -36,12 +36,23 @@ const formRules: FormRules = reactive({
     { required: true, message: "请输入密码", trigger: "blur" },
     { min: 8, max: 16, message: "长度在 8 到 16 个字符", trigger: "blur" }
   ],
-  phone: [{ required: false }, { validator: validPhone, trigger: "blur" }],
-  email: [
-    { required: true, trigger: "blur", message: "请输入邮箱" },
-    { validator: validEmail, trigger: "blur" }
+  phone: [
+    {
+      required: false,
+      pattern: phoneReg,
+      message: "请输入合法的手机号",
+      trigger: "blur"
+    }
   ],
-  role: [{ required: true, trigger: "blur", message: "请选择角色" }]
+  email: [
+    {
+      required: true,
+      pattern: emailReg,
+      message: "请输入合法的邮箱",
+      trigger: "blur"
+    }
+  ],
+  roleId: [{ required: true, trigger: "blur", message: "请选择角色" }]
 })
 
 const handleCreate = () => {
@@ -54,7 +65,7 @@ const handleCreate = () => {
           nickName: formData.nickName,
           avatar: "",
           phone: formData.phone,
-          role: Number.parseInt(formData.role),
+          role: Number.parseInt(formData.roleId),
           email: formData.email
         }).then(() => {
           ElMessage.success("新增成功")
@@ -68,7 +79,7 @@ const handleCreate = () => {
           nickName: formData.nickName,
           email: formData.email,
           phone: formData.phone,
-          role: Number.parseInt(formData.role),
+          role: Number.parseInt(formData.roleId),
           updateBy: 0
         }).then(() => {
           ElMessage.success("修改成功")
@@ -90,7 +101,7 @@ const resetForm = () => {
   formData.nickName = ""
   formData.email = ""
   formData.phone = ""
-  formData.role = ""
+  formData.roleId = ""
 }
 //start delete
 const handleDelete = (row: UserDto) => {
@@ -116,7 +127,7 @@ const handleUpdate = (userDto: UserDto) => {
   formData.nickName = userDto.nickName
   formData.email = userDto.email
   formData.phone = userDto.phone
-  formData.role = userDto.role?.name || ""
+  formData.roleId = userDto.role!.id.toString()
   currentUpdateId.value = userDto.id.toString()
   dialogVisible.value = true
 }
@@ -212,8 +223,8 @@ onMounted(() => fetchRoles())
           <el-input v-model="formData.nickName" />
         </el-form-item>
         <el-form-item prop="role" label="角色">
-          <el-select v-model="formData.role" clearable="true" placeholder="选择用户角色">
-            <el-option v-for="item in roles" :key="item.code" :label="item.name" :value="item.id" />
+          <el-select v-model="formData.roleId" placeholder="选择用户角色">
+            <el-option v-for="item in roles" :key="item.id.toString()" :label="item.name" :value="item.id.toString()" />
           </el-select>
         </el-form-item>
       </el-form>
