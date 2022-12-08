@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, reactive, ref, watch } from "vue"
+import { reactive, ref, watch } from "vue"
 import { RoleDto, UserDto } from "@/request/generator"
 import { api } from "@/utils/service"
 import { CirclePlus, RefreshRight } from "@element-plus/icons-vue"
@@ -154,7 +154,6 @@ const handleRefresh = () => {
 
 /** 监听分页参数变化*/
 watch([() => paginationData.page, () => paginationData.size], fetchTableData, { immediate: true })
-onMounted(() => fetchRoles())
 </script>
 <template>
   <div class="app-container">
@@ -178,7 +177,7 @@ onMounted(() => fetchRoles())
           <el-table-column prop="email" label="邮箱" align="center" />
           <el-table-column prop="role.name" label="角色" align="center" />
           <el-table-column prop="createAt" label="创建时间" align="center" />
-          <el-table-column fixed="right" label="操作" width="150" align="center">
+          <el-table-column fixed="'right'" label="操作" width="150" align="center">
             <template #default="scope">
               <el-button type="primary" text bg size="small" @click="handleUpdate(scope.row)">修改</el-button>
               <el-button type="danger" text bg size="small" @click="handleDelete(scope.row)">删除</el-button>
@@ -204,6 +203,7 @@ onMounted(() => fetchRoles())
       v-model="dialogVisible"
       :title="currentUpdateId === undefined ? '新增用户' : '修改用户'"
       @close="resetForm"
+      @open="fetchRoles"
       width="30%"
     >
       <el-form ref="formRef" :model="formData" :rules="formRules" label-width="auto">
