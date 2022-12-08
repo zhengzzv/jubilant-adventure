@@ -1,4 +1,4 @@
-name: Build v3-admin-vite
+name: Build jubilant-adventure
 
 on:
   push:
