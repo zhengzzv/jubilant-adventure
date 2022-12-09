@@ -133,8 +133,9 @@ watch([() => paginationData.page, () => paginationData.size], fetchTableData, { 
           <el-table-column prop="name" label="角色名" align="center" />
           <el-table-column prop="code" label="角色码" align="center" />
           <el-table-column prop="createAt" label="创建时间" align="center" />
-          <el-table-column fixed="'right'" label="操作" width="250" align="center">
+          <el-table-column label="操作" width="250" align="center">
             <template #default="scope">
+              <el-button type="primary" text bg size="small" @click="handleUpdate(scope.row)">修改</el-button>
               <el-button type="primary" text bg size="small" @click="openUpdateDialog(scope.row)">分配权限</el-button>
               <el-button type="danger" text bg size="small" @click="handleDelete(scope.row)">删除</el-button>
             </template>
