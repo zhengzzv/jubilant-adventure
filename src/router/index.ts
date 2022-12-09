@@ -62,34 +62,6 @@ export const constantRoutes: RouteRecordRaw[] = [
     meta: {
       hidden: true
     }
-  },
-  {
-    path: "/table",
-    component: Layout,
-    redirect: "/table/element-plus",
-    name: "Table",
-    meta: {
-      title: "表格",
-      elIcon: "Grid"
-    },
-    children: [
-      {
-        path: "element-plus",
-        component: () => import("@/views/table/element-plus/index.vue"),
-        name: "ElementPlus",
-        meta: {
-          title: "Element Plus"
-        }
-      },
-      {
-        path: "vxe-table",
-        component: () => import("@/views/table/vxe-table/index.vue"),
-        name: "VxeTable",
-        meta: {
-          title: "Vxe Table"
-        }
-      }
-    ]
   }
 ]
 
@@ -100,45 +72,10 @@ export const constantRoutes: RouteRecordRaw[] = [
  */
 export const asyncRoutes: RouteRecordRaw[] = [
   {
-    path: "/permission",
-    component: Layout,
-    redirect: "/permission/page",
-    name: "Permission",
-    meta: {
-      title: "权限管理",
-      svgIcon: "lock",
-      roles: ["SUPER_ADMIN", "editor"], // 可以在根路由中设置角色
-      alwaysShow: true // 将始终显示根菜单
-    },
-    children: [
-      {
-        path: "page",
-        component: () => import("@/views/permission/page.vue"),
-        name: "PagePermission",
-        meta: {
-          title: "页面权限",
-          roles: ["SUPER_ADMIN"] // 或者在子导航中设置角色
-        }
-      },
-      {
-        path: "directive",
-        component: () => import("@/views/permission/directive.vue"),
-        name: "DirectivePermission",
-        meta: {
-          title: "指令权限" // 如果未设置角色，则表示：该页面不需要权限，但会继承根路由的角色
-        }
-      }
-    ]
-  },
-  {
     path: "/user-manager",
     component: Layout,
-    name: "User",
     redirect: "/users",
     meta: {
-      title: "用户管理",
-      svgIcon: "lock",
-      roles: ["SUPER_ADMIN"],
       alwaysShow: false
     },
     children: [
@@ -147,7 +84,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/user/index.vue"),
         name: "User List",
         meta: {
-          title: "用户列表",
+          svgIcon: "lock",
+          title: "用户管理",
           roles: ["SUPER_ADMIN"]
         }
       }
@@ -156,12 +94,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
   {
     path: "/role-manager",
     component: Layout,
-    name: "Roles",
     redirect: "/roles",
     meta: {
-      title: "角色管理",
-      svgIcon: "lock",
-      roles: ["SUPER_ADMIN"],
       alwaysShow: false
     },
     children: [
@@ -170,7 +104,8 @@ export const asyncRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/role/index.vue"),
         name: "Role List",
         meta: {
-          title: "角色列表",
+          title: "角色管理",
+          svgIcon: "lock",
           roles: ["SUPER_ADMIN"]
         }
       }
