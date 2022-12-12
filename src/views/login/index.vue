@@ -17,8 +17,8 @@ const loading = ref(false)
 const code = ref("")
 /** 登录表单数据 */
 const loginForm: LoginCommand = reactive({
-  username: "lingxi",
-  password: "12345678",
+  username: "",
+  password: "",
   code: code.value
 })
 /** 登录表单校验规则 */
@@ -63,7 +63,7 @@ const handleLogin = () => {
     <ThemeSwitch class="theme-switch" />
     <div class="login-card">
       <div class="title">
-        <img src="@/assets/layout/logo-text-2.png" />
+        <img src="@/assets/layout/logo-text-2.png" alt="1" />
       </div>
       <div class="content">
         <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" @keyup.enter="handleLogin">
@@ -103,7 +103,7 @@ const handleLogin = () => {
               </template>
             </el-input>
           </el-form-item>
-          <el-button :loading="loading" type="primary" size="large" @click.prevent="handleLogin"> 登 录 </el-button>
+          <el-button :loading="loading" type="primary" size="large" @click.prevent="handleLogin"> 登 录</el-button>
         </el-form>
       </div>
     </div>
@@ -117,32 +117,39 @@ const handleLogin = () => {
   align-items: center;
   width: 100%;
   min-height: 100%;
+
   .theme-switch {
     position: fixed;
     top: 5%;
     right: 5%;
     cursor: pointer;
   }
+
   .login-card {
     width: 480px;
     border-radius: 20px;
     box-shadow: 0 0 10px #dcdfe6;
     background-color: #fff;
     overflow: hidden;
+
     .title {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 150px;
+
       img {
         height: 100%;
       }
     }
+
     .content {
       padding: 20px 50px 50px 50px;
+
       :deep(.el-input-group__append) {
         padding: 0;
         overflow: hidden;
+
         .el-image {
           width: 100px;
           height: 40px;
@@ -152,6 +159,7 @@ const handleLogin = () => {
           text-align: center;
         }
       }
+
       .el-button {
         width: 100%;
         margin-top: 10px;
