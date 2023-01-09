@@ -99,7 +99,7 @@ const handleLogin = () => {
               size="large"
             >
               <template v-slot:append>
-                <image-verify :height="30" />
+                <image-verify />
               </template>
             </el-input>
           </el-form-item>
