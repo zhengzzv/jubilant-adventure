@@ -1,14 +1,12 @@
 import { ref } from "vue"
 import store from "@/store"
 import { defineStore } from "pinia"
-import { removeToken, setToken } from "@/utils/cache/localStorage"
 import { resetRouter } from "@/router"
 import { api } from "@/utils/service"
 import { ElMessage } from "element-plus"
 import { LoginCommand, UserDto } from "@/request/generator"
 
 export const useUserStore = defineStore("user", () => {
-  const token = ref<string>("")
   const currentUser = ref<UserDto>()
   const roles = ref<string[]>([])
 
@@ -19,12 +17,10 @@ export const useUserStore = defineStore("user", () => {
   /** 登录 */
   const login = async (request: LoginCommand) => {
     const response = await api.UserAPi.login(request)
-    const jwt = response.headers.authorization
-    if (jwt) {
-      token.value = jwt
-      setToken(jwt)
+    if (response.status == 200) {
+      ElMessage.success("login success")
     } else {
-      ElMessage.error("server not return jwt ")
+      ElMessage.error("login error")
       resetRouter()
     }
   }
@@ -43,20 +39,11 @@ export const useUserStore = defineStore("user", () => {
   const logout = async () => {
     await api.UserAPi.logout().then(() => {
       console.log("退出登陆")
-      removeToken()
-      token.value = ""
       roles.value = []
       resetRouter()
     })
   }
-  /** 重置 Token */
-  const resetToken = () => {
-    removeToken()
-    token.value = ""
-    roles.value = []
-  }
-
-  return { token, roles, currentUser, setRoles, login, fetchUserRole, logout, resetToken }
+  return { roles, currentUser, setRoles, login, fetchUserRole, logout }
 })
 
 /** 在 setup 外使用 */

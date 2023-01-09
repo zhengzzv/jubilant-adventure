@@ -1,9 +1,8 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios"
-import { useUserStoreHook } from "@/store/modules/user"
+import router from "@/router"
 import { ElMessage } from "element-plus"
 import { get } from "lodash-es"
 import { Configuration, UsersApi, FilesApi, RolesApi } from "@/request/generator"
-import { getToken } from "@/utils/cache/localStorage"
 
 /** 创建请求实例 */
 function createService() {
@@ -15,15 +14,7 @@ function createService() {
   service.defaults.baseURL = import.meta.env.VITE_BASE_API
 
   service.defaults.withCredentials = true
-  // 请求拦截
-  service.interceptors.request.use(
-    (request) => {
-      request.headers!.Authorization = "Bearer " + getToken()
-      return request
-    },
-    // 发送失败
-    (error) => Promise.reject(error)
-  )
+
   // 响应拦截（可根据具体业务作出相应的调整）
   service.interceptors.response.use(
     (response) => response,
@@ -36,9 +27,8 @@ function createService() {
           error.message = "请求错误 " + errMsg.message
           break
         case 401:
-          // Token 过期时，直接退出登录并强制刷新页面（会重定向到登录页）
-          useUserStoreHook().logout()
-          location.reload()
+          // 登录信息失效，直接跳转到登录页面
+          router.push("/login")
           break
         case 403:
           error.message = "拒绝访问"
