@@ -47,6 +47,8 @@ const createFormRules: FormRules = reactive({
 const resetCreateForm = () => {
   createForm.code = ""
   createForm.name = ""
+  selectedPermissions.value = new Array<number>()
+  fetchTableData()
 }
 const handleCreate = () => {
   createFormRef.value?.validate((valid: boolean) => {
@@ -54,7 +56,7 @@ const handleCreate = () => {
       api.RoleApi.createRole({
         name: createForm.name,
         code: createForm.code,
-        permission: new Array<number>()
+        permission: selectedPermissions.value
       }).then(() => {
         ElMessage.success("新增成功")
         createDialog.value = false
@@ -88,8 +90,10 @@ const selectedPermissions = ref<Array<number>>()
 const openUpdateDialog = (role: RoleDto) => {
   updateRoleCommandRef.value = {
     id: role.id,
-    name: role.name
+    name: role.name,
+    permissions: role.permissions?.map((p) => p.id)
   }
+  selectedPermissions.value = role.permissions?.map((p) => p.id)
   updateDialog.value = true
 }
 
@@ -155,13 +159,18 @@ watch([() => paginationData.page, () => paginationData.size], fetchTableData, { 
       </div>
     </el-card>
     <!--新增角色-->
-    <el-dialog v-model="createDialog" :title="'新增角色'" @close="resetCreateForm" width="30%">
+    <el-dialog v-model="createDialog" :title="'新增角色'" @open="fetchPermissions" @close="resetCreateForm" width="30%">
       <el-form ref="createFormRef" :model="createForm" :rules="createFormRules" label-width="auto">
         <el-form-item prop="name" label="角色名">
           <el-input v-model="createForm.name" />
         </el-form-item>
         <el-form-item prop="code" label="角色码">
           <el-input v-model="createForm.code" />
+        </el-form-item>
+        <el-form-item prop="permissions" label="权限">
+          <el-checkbox-group v-model="selectedPermissions">
+            <el-checkbox v-for="p in permissions" :key="p.id" :label="p.id">{{ p.name }}</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
       </el-form>
       <template #footer>

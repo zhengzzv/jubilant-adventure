@@ -335,6 +335,12 @@ export interface RoleDto {
     name: string;
     /**
      * 
+     * @type {Array<PermissionDto>}
+     * @memberof RoleDto
+     */
+    permissions?: Array<PermissionDto>;
+    /**
+     * 
      * @type {number}
      * @memberof RoleDto
      */
